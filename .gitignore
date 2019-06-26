@@ -8,3 +8,5 @@ jspm_packages
 
 secrets.json
 
+# MAC specific
+.DS_Store
