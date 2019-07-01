@@ -5,7 +5,8 @@ export default class Video extends React.Component {
   constructor(props) {
     super(props);
     this.state = {  };
-  }
+  };
+
   static defaultProps = {
     poster: null,
     src: null,
@@ -16,9 +17,12 @@ export default class Video extends React.Component {
     loop: true,
     autoPlay: true,
     preload: 'auto',
-  }
+  };
 
   createVideoElem() {
+    if(!this.props.src)
+      return <p>No video source specified...</p>;
+
     return(
       <video
         width     = { this.props.width }
