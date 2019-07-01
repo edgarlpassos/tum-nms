@@ -20,9 +20,6 @@ export default class Video extends React.Component {
   };
 
   createVideoElem() {
-    if(!this.props.src)
-      return <p>No video source specified...</p>;
-
     return(
       <video
         width     = { this.props.width }
@@ -33,7 +30,7 @@ export default class Video extends React.Component {
         controls  = { this.props.controls }
         preload   = { this.props.auto }
       >
-        <source src={ this.props.src } type={ this.props.type } />
+        <source src={ this.props.url } type={ this.props.type } />
         Your browser does not support the video tag.
       </video>
     );

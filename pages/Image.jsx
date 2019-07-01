@@ -7,19 +7,11 @@ export default class Image extends React.Component {
     this.state = {  };
   };
 
-  getImageURL() {
-    const params = {
-      Bucket: this.props.bucket,
-      Key: this.props.file,
-    };
-
-    return this.props.s3.getSignedUrl('getObject', params);
-  }
-
   render() {
     return (
       <div>
-        <img src={ this.getImageURL() } />
+        <h2>Image.jsx</h2>
+        <img src={ this.props.url } />
       </div>
     );
   }
