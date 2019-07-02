@@ -6,6 +6,7 @@ const pathMatch = require('path-match');
 const app = next({ dev });
 const handle = app.getRequestHandler();
 const { parse } = require('url');
+const conn = require('./config/db');
 
 const server = express();
 const route = pathMatch();
