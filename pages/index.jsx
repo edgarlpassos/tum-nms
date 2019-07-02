@@ -2,7 +2,8 @@ import React from 'react';
 
 import Video from './Video';
 import Image from './Image';
-import getURL from './S3';
+import { getURL } from './S3_handler';
+
 
 export default () => (
   <div>
