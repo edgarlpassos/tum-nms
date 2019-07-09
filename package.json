@@ -38,7 +38,6 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.2",
     "sequelize-cli": "^5.5.0",
-    "serverless-apigw-binary": "^0.4.4",
     "serverless-domain-manager": "^3.2.2",
     "serverless-http": "^2.0.2",
     "serverless-offline": "^5.7.2",

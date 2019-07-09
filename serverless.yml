@@ -5,6 +5,7 @@ resources:
   - ${file(resources/cognito-user-pool.yml)}
   - ${file(resources/cognito-identity-pool.yml)}
   - ${file(resources/s3.yml)}
+  - ${file(resources/api-gateway-errors.yml)}
 
 provider:
   name: aws
@@ -17,6 +18,8 @@ provider:
     DB_NAME: ${self:custom.secrets.DB_NAME}
     DB_USER: ${self:custom.secrets.DB_USER}
     DB_PASS: ${self:custom.secrets.DB_PASS}
+  iamManagedPolicies:
+    - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
 
 functions:
   createUser:
@@ -27,16 +30,11 @@ functions:
           method: post
           cors: true
 
-
 plugins:
-  - serverless-apigw-binary
   - serverless-webpack
   - serverless-offline
 
 custom:
-  apigwBinary:
-    types:
-      - "*/*"
   secrets: ${file(secrets.json)}
   stage: ${opt:stage, self:provider.stage}
   webpack:
