@@ -1,9 +1,11 @@
-const Sequelize = require('sequelize');
-const config  = require('../db/config.js');
-const db = process.env.NODE_ENV === 'production' ? config.production : config.development;
+import Sequelize from 'sequelize';
+import config from '../db/config';
 
-module.exports = new Sequelize(
-    db.database, db.username, db.password,
-    { host: db.host, dialect: db.dialect }
+const dbConfig = process.env.NODE_ENV === 'production' ? config.production : config.development;
+
+const dbConnection = new Sequelize(
+  dbConfig.database, dbConfig.username, dbConfig.password,
+  { host: dbConfig.host, dialect: dbConfig.dialect },
 );
 
+export default dbConnection;
