@@ -1,12 +1,12 @@
-const secrets = require('../secrets.json');
+import secrets from '../secrets';
 
-module.exports = {
+export default {
   development: {
     username: secrets.DEV_DB_USER,
     password: secrets.DEV_DB_PASS,
     database: secrets.DEV_DB_NAME,
     host: secrets.DEV_DB_HOST,
-    dialect: 'postgres'
+    dialect: 'postgres',
   },
   production: {
     username: process.env.DB_USER,
@@ -14,5 +14,5 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     dialect: 'postgres',
-  }
+  },
 };

@@ -4,7 +4,9 @@ jspm_packages
 .next
 
 # Serverless directories
-.serverless
+.serverless/
+.webpack/
 
+mocks/
 secrets.json
 
