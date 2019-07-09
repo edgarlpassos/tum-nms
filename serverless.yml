@@ -22,10 +22,12 @@ functions:
   createUser:
     handler: createUser.main
     events:
-      - http: 
+      - http:
           path: users
           method: post
           cors: true
+  getVideoUrl:
+    handler: getVideoUrl.main
 
 
 plugins:
