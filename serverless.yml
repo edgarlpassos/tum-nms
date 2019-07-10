@@ -29,8 +29,13 @@ functions:
           path: users
           method: post
           cors: true
-  getVideoUrl:
-    handler: getVideoUrl.main
+  createVideo:
+    handler: createVideo.main
+    events:
+      - http:
+          path: videos
+          method: post
+          cors: true
 
 plugins:
   - serverless-webpack
