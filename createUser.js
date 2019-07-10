@@ -3,6 +3,9 @@ import User from './db/models/user';
 import db from './config/db';
 
 export async function main(event, context, callback) {
+  // Do not wait for sequelize connection to close
+  context.callbackWaitsForEmptyEventLoop = false;
+
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': true,
@@ -11,32 +14,31 @@ export async function main(event, context, callback) {
   User.init(db);
 
   let response;
-  let status;
+  let statusCode;
 
   const { username } = JSON.parse(event.body);
   const newUser = { username };
 
   try {
     const createdUser = await User.create(newUser);
-    status = 201;
+    statusCode = 201;
 
     response = {
-      status,
+      statusCode,
       headers,
       body: JSON.stringify(createdUser),
     };
   } catch (error) {
-    status = 500;
-
+    statusCode = 500;
 
     if (error instanceof Sequelize.UniqueConstraintError) {
-      status = 409;
+      statusCode = 409;
     }
 
     response = {
-      status,
+      statusCode,
       headers,
-      message: error.message,
+      body: JSON.stringify({ message: error.message }),
     };
   }
 

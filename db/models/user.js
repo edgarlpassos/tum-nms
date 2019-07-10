@@ -11,7 +11,10 @@ class User extends Model {
         unique: true,
       },
       picture: DataTypes.STRING,
-    }, { sequelize });
+    }, {
+      sequelize,
+      tableName: 'Users',
+    });
   }
 }
 
