@@ -36,6 +36,8 @@ functions:
           path: videos
           method: post
           cors: true
+  queryVideo:
+    handler: queryVideo.main
 
 plugins:
   - serverless-webpack
