@@ -10,3 +10,5 @@ jspm_packages
 mocks/
 secrets.json
 
+# Mac specifc
+.DS_Store
