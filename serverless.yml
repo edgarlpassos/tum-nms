@@ -25,7 +25,7 @@ functions:
   createUser:
     handler: createUser.main
     events:
-      - http: 
+      - http:
           path: users
           method: post
           cors: true
@@ -36,6 +36,24 @@ functions:
           path: videos
           method: post
           cors: true
+  listVideo:
+    handler: listVideo.main
+    events:
+      - http:
+          path: videos
+          method: get
+          cors: true
+  getVideo:
+    handler: getVideo.main
+    events:
+      - http:
+          path: videos/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
 
 plugins:
   - serverless-webpack
