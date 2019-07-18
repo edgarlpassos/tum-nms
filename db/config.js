@@ -1,6 +1,6 @@
-import secrets from '../secrets';
+const secrets = require('../secrets');
 
-export default {
+module.exports = {
   development: {
     username: secrets.DEV_DB_USER,
     password: secrets.DEV_DB_PASS,
