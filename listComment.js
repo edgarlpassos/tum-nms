@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import Comment from './db/models/comment';
 import User from './db/models/user';
 import db from './config/db';
 
@@ -11,7 +12,11 @@ export async function main(event, context, callback) {
     'Access-Control-Allow-Credentials': true,
   };
 
+  Comment.init(db);
   User.init(db);
+
+  Comment.belongsTo(User, {foreignKey: 'created_by'});
+  User.hasMany(Comment, {foreignKey: 'id'});
 
   let response;
   let statusCode;
@@ -19,20 +24,21 @@ export async function main(event, context, callback) {
   const id = event.pathParameters.id;
 
   try {
-    const result = await User.findByPk(id);
-    
-    statusCode = 200;
-    let body = JSON.stringify(result);
+    const result = await Comment.findAll({
+      where: { video: id },
+      include: [{
+        model: User,
+        required: false,
+        attributes: ['username'],
+       }]
+    });
 
-    if (result === null) {
-      statusCode = 404;
-      body = JSON.stringify({ message: 'Empty query result' });
-    }
+    statusCode = 200;
 
     response = {
       statusCode,
       headers,
-      body,
+      body: JSON.stringify(result),
     };
   } catch (error) {
     statusCode = 500;

@@ -72,6 +72,31 @@ functions:
             parameters:
               paths:
                 id: true
+  createComment:
+    handler: createComment.main
+    events:
+      - http:
+          path: comments
+          method: post
+          cors: true
+  listComment:
+    handler: listComment.main
+    events:
+      - http:
+          path: videos/{id}/comments
+          method: get
+          cors: true
+  getComment:
+    handler: getComment.main
+    events:
+      - http:
+          path: comments/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
 
 plugins:
   - serverless-webpack

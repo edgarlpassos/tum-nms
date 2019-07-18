@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize';
-import User from './db/models/user';
+import Comment from './db/models/comment';
 import db from './config/db';
 
 export async function main(event, context, callback) {
@@ -11,36 +11,36 @@ export async function main(event, context, callback) {
     'Access-Control-Allow-Credentials': true,
   };
 
-  User.init(db);
+  Comment.init(db);
 
   let response;
   let statusCode;
 
-  const id = event.pathParameters.id;
+  const { content, video, timestamp, created_by } = JSON.parse(event.body);
+  const commentData = { content, video, timestamp, created_by }
 
   try {
-    const result = await User.findByPk(id);
-    
-    statusCode = 200;
-    let body = JSON.stringify(result);
+    const createdComment = await Comment.create(commentData);
+    statusCode = 201;
 
-    if (result === null) {
-      statusCode = 404;
-      body = JSON.stringify({ message: 'Empty query result' });
+    response = {
+      statusCode,
+      headers,
+      body: JSON.stringify(createdComment),
+    };
+  } catch (error) {
+    statusCode = 500;
+    let { message } = error;
+
+    if (error instanceof Sequelize.ForeignKeyConstraintError) {
+      statusCode = 400;
+      message = 'Video || Owner does not exist';
     }
 
     response = {
       statusCode,
       headers,
-      body,
-    };
-  } catch (error) {
-    statusCode = 500;
-
-    response = {
-      statusCode,
-      headers,
-      body: JSON.stringify(error),
+      body: JSON.stringify({ message }),
     };
   }
 

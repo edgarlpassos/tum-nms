@@ -29,6 +29,7 @@ export async function main(event, context, callback) {
         attributes: ['username'],
        }]
     });
+
     statusCode = 200;
 
     response = {
