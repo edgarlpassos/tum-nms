@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 import Video from './db/models/video';
+import User from './db/models/user';
 import db from './config/db';
 
 export async function main(event, context, callback) {
@@ -12,12 +13,22 @@ export async function main(event, context, callback) {
   };
 
   Video.init(db);
+  User.init(db);
+
+  Video.belongsTo(User, {foreignKey: 'owner'});
+  User.hasMany(Video, {foreignKey: 'id'});
 
   let response;
   let statusCode;
 
   try {
-    const result = await Video.findAll();
+    const result = await Video.findAll({
+      include: [{
+        model: User,
+        required: false,
+        attributes: ['username'],
+       }]
+    });
     statusCode = 200;
 
     response = {
