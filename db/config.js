@@ -1,6 +1,6 @@
 const secrets = require('../secrets');
 
-module.exports = {
+export default {
   development: {
     username: secrets.DEV_DB_USER,
     password: secrets.DEV_DB_PASS,
