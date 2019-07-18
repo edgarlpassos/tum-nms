@@ -29,6 +29,24 @@ functions:
           path: users
           method: post
           cors: true
+  listUser:
+    handler: listUser.main
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+  getUser:
+    handler: getUser.main
+    events:
+      - http:
+          path: users/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
   createVideo:
     handler: createVideo.main
     events:
