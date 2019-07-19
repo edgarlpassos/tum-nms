@@ -1,0 +1,85 @@
+createUser:
+  handler: functions/api/createUser.main
+  events:
+    - http:
+        path: users
+        method: post
+        cors: true
+listUser:
+  handler: functions/api/listUser.main
+  events:
+    - http:
+        path: users
+        method: get
+        cors: true
+getUser:
+  handler: functions/api/getUser.main
+  events:
+    - http:
+        path: users/{id}
+        method: get
+        cors: true
+        request:
+          parameters:
+            paths:
+              id: true
+createVideo:
+  handler: functions/api/createVideo.main
+  events:
+    - http:
+        path: videos
+        method: post
+        cors: true
+listVideo:
+  handler: functions/api/listVideo.main
+  events:
+    - http:
+        path: videos
+        method: get
+        cors: true
+getVideo:
+  handler: functions/api/getVideo.main
+  events:
+    - http:
+        path: videos/{id}
+        method: get
+        cors: true
+        request:
+          parameters:
+            paths:
+              id: true
+createComment:
+  handler: functions/api/createComment.main
+  events:
+    - http:
+        path: comments
+        method: post
+        cors: true
+listComment:
+  handler: functions/api/listComment.main
+  events:
+    - http:
+        path: videos/{id}/comments
+        method: get
+        cors: true
+getComment:
+  handler: functions/api/getComment.main
+  events:
+    - http:
+        path: comments/{id}
+        method: get
+        cors: true
+        request:
+          parameters:
+            paths:
+              id: true
+createStrip:
+  handler: functions/processing/createStrip.main
+  layers:
+    - arn:aws:lambda:eu-central-1:861288909389:layer:ffmpeg:1
+    - arn:aws:lambda:eu-central-1:861288909389:layer:image-magick:1 
+  events:
+    - existingS3:
+        bucket: 'videocloud-production-inputbucket-1p5ppjlf78zwe'
+        events: 
+          - 's3:ObjectCreated:*'
