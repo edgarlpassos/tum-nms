@@ -18,89 +18,18 @@ provider:
     DB_NAME: ${self:custom.secrets.DB_NAME}
     DB_USER: ${self:custom.secrets.DB_USER}
     DB_PASS: ${self:custom.secrets.DB_PASS}
+    STRIP_BUCKET_NAME: ${self:custom.secrets.STRIP_BUCKET_NAME}
   iamManagedPolicies:
     - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+    - arn:aws:iam::aws:policy/AmazonS3FullAccess
 
 functions:
-  createUser:
-    handler: createUser.main
-    events:
-      - http:
-          path: users
-          method: post
-          cors: true
-  listUser:
-    handler: listUser.main
-    events:
-      - http:
-          path: users
-          method: get
-          cors: true
-  getUser:
-    handler: getUser.main
-    events:
-      - http:
-          path: users/{id}
-          method: get
-          cors: true
-          request:
-            parameters:
-              paths:
-                id: true
-  createVideo:
-    handler: createVideo.main
-    events:
-      - http:
-          path: videos
-          method: post
-          cors: true
-  listVideo:
-    handler: listVideo.main
-    events:
-      - http:
-          path: videos
-          method: get
-          cors: true
-  getVideo:
-    handler: getVideo.main
-    events:
-      - http:
-          path: videos/{id}
-          method: get
-          cors: true
-          request:
-            parameters:
-              paths:
-                id: true
-  createComment:
-    handler: createComment.main
-    events:
-      - http:
-          path: comments
-          method: post
-          cors: true
-  listComment:
-    handler: listComment.main
-    events:
-      - http:
-          path: videos/{id}/comments
-          method: get
-          cors: true
-  getComment:
-    handler: getComment.main
-    events:
-      - http:
-          path: comments/{id}
-          method: get
-          cors: true
-          request:
-            parameters:
-              paths:
-                id: true
+  - ${file(resources/functions.yml)}
 
 plugins:
   - serverless-webpack
   - serverless-offline
+  - serverless-plugin-existing-s3
 
 custom:
   secrets: ${file(secrets.json)}
