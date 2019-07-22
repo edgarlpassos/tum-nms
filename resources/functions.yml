@@ -83,3 +83,5 @@ createStrip:
         bucket: 'videocloud-production-inputbucket-1p5ppjlf78zwe'
         events: 
           - 's3:ObjectCreated:*'
+        rules:
+          - prefix: 'public/'

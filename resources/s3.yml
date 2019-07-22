@@ -18,11 +18,6 @@ Resources:
               - HEAD
             MaxAge: 3000
 
-  StripBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: ${self:custom.secrets.STRIP_BUCKET_NAME}
-
 # Print out the name of the bucket that is created
 Outputs:
   InputBucketName:

@@ -14,14 +14,14 @@ async function asyncForEach(array, callback) {
   }
 }
 
-async function uploadToS3(imageFileName) {
+async function uploadToS3(imageFileName, bucketName) {
   try {
     const file = readFileSync(`/tmp/${imageFileName}`);
 
     await s3.putObject({
       Body: file,
-      Bucket: process.env.STRIP_BUCKET_NAME,
-      Key: imageFileName,
+      Bucket: bucketName,
+      Key: `strips/${imageFileName}`,
     }).promise();
 
     console.log('Strip uploaded.');
@@ -30,7 +30,7 @@ async function uploadToS3(imageFileName) {
   }
 }
 
-async function createStripAndUpload(filenames, videoName) {
+async function createStripAndUpload(filenames, videoName, bucketName) {
   const paths = filenames.map(filename => `/tmp/${filename}`);
   const imageName = `${videoName}.png`;
 
@@ -39,7 +39,7 @@ async function createStripAndUpload(filenames, videoName) {
     if (err) {
       throw err;
     }
-    uploadToS3(imageName);
+    uploadToS3(imageName, bucketName);
   });
 }
 
@@ -57,8 +57,10 @@ export function main(event) {
     }
 
     const { key } = record.s3.object;
+    const bucketName = record.s3.bucket.name;
+
     const s3Object = await s3.getObject({
-      Bucket: record.s3.bucket.name,
+      Bucket: bucketName,
       Key: key,
     }).promise();
 
@@ -69,7 +71,7 @@ export function main(event) {
     let screenshots;
     ffmpeg(filename)
       .on('filenames', (filenames) => { screenshots = filenames; })
-      .on('end', () => { createStripAndUpload(screenshots, videoName); })
+      .on('end', () => { createStripAndUpload(screenshots, videoName, bucketName); })
       .on('error', (error) => { console.log(error); })
       .screenshots({
         count: 20,
