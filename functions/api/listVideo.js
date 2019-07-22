@@ -23,6 +23,9 @@ export async function main(event, context, callback) {
 
   try {
     const result = await Video.findAll({
+      order: [
+        ['createdAt', 'DESC'],
+      ],
       include: [{
         model: User,
         required: false,

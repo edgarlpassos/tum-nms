@@ -25,6 +25,9 @@ export async function main(event, context, callback) {
 
   try {
     const result = await Comment.findAll({
+      order: [
+        ['createdAt', 'DESC'],
+      ],
       where: { video: id },
       include: [{
         model: User,
