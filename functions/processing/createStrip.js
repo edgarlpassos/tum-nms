@@ -21,7 +21,7 @@ async function uploadToS3(imageFileName, bucketName) {
     await s3.putObject({
       Body: file,
       Bucket: bucketName,
-      Key: `strips/${imageFileName}`,
+      Key: `public/strips/${imageFileName}`,
     }).promise();
 
     console.log('Strip uploaded.');
@@ -64,7 +64,7 @@ export function main(event) {
       Key: key,
     }).promise();
 
-    const videoName = key.split('/')[1].split('.')[0];
+    const videoName = key.split('/')[2].split('.')[0];
     const filename = `/tmp/${videoName}.mp4`;
     writeFileSync(filename, s3Object.Body);
 
