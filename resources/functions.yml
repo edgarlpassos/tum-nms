@@ -59,9 +59,33 @@ listComment:
   handler: functions/api/listComment.main
   events:
     - http:
-        path: videos/{id}/comments
+        path: comments/{videoId}/{userId}
         method: get
         cors: true
+        request:
+          parameters:
+            paths:
+              videoId: true
+              userId: true
+createLike:
+  handler: functions/api/createLike.main
+  events:
+    - http:
+        path: likes
+        method: post
+        cors: true
+deleteLike:
+  handler: functions/api/deleteLike.main
+  events:
+    - http:
+        path: likes/{comment}/{user}
+        method: delete
+        cors: true
+        request:
+          parameters:
+            paths:
+              comment: true
+              user: true
 createStrip:
   handler: functions/processing/createStrip.main
   layers:

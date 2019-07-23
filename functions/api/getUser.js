@@ -1,4 +1,3 @@
-import Sequelize from 'sequelize';
 import User from './db/models/user';
 import db from './config/db';
 
@@ -20,7 +19,7 @@ export async function main(event, context, callback) {
 
   try {
     const result = await User.findByPk(id);
-    
+
     statusCode = 200;
     let body = JSON.stringify(result);
 

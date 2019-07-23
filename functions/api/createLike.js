@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize';
-import Comment from './db/models/comment';
+import Like from './db/models/like';
 import db from './config/db';
 
 export async function main(event, context, callback) {
@@ -11,22 +11,36 @@ export async function main(event, context, callback) {
     'Access-Control-Allow-Credentials': true,
   };
 
-  Comment.init(db);
+  Like.init(db);
 
   let response;
   let statusCode;
 
-  const { content, video, timestamp, created_by } = JSON.parse(event.body);
-  const commentData = { content, video, timestamp, created_by };
+  const { comment, user } = JSON.parse(event.body);
 
   try {
-    const createdComment = await Comment.create(commentData);
-    statusCode = 201;
+    const createdLike = await Like.findOrCreate({
+      where: {
+        comment: comment,
+        user: user,
+      },
+    });
+
+    const successful = JSON.parse(JSON.stringify(createdLike))[1]
+    let body;
+
+    if (successful) {
+      statusCode = 201;
+      body = JSON.stringify(createdLike);
+    } else {
+      statusCode = 409;
+      body = 'Row already exists in DB';
+    }
 
     response = {
       statusCode,
       headers,
-      body: JSON.stringify(createdComment),
+      body: body,
     };
   } catch (error) {
     statusCode = 500;
@@ -34,7 +48,7 @@ export async function main(event, context, callback) {
 
     if (error instanceof Sequelize.ForeignKeyConstraintError) {
       statusCode = 400;
-      message = 'Video || Owner does not exist';
+      message = 'Comment || User does not exist';
     }
 
     response = {
