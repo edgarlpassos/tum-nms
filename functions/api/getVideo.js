@@ -1,4 +1,3 @@
-import Sequelize from 'sequelize';
 import Video from './db/models/video';
 import User from './db/models/user';
 import db from './config/db';

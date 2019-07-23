@@ -1,5 +1,4 @@
-import Video from './db/models/video';
-import User from './db/models/user';
+import Like from './db/models/like';
 import db from './config/db';
 
 export async function main(event, context, callback) {
@@ -11,32 +10,36 @@ export async function main(event, context, callback) {
     'Access-Control-Allow-Credentials': true,
   };
 
-  Video.init(db);
-  User.init(db);
-
-  Video.belongsTo(User, {foreignKey: 'owner'});
-  User.hasMany(Video, {foreignKey: 'id'});
+  Like.init(db);
 
   let response;
   let statusCode;
 
+  const { comment, user } = event.pathParameters;
+
   try {
-    const result = await Video.findAll({
-      order: [
-        ['createdAt', 'DESC'],
-      ],
-      include: [{
-        model: User,
-        required: false,
-        attributes: ['username'],
-       }]
+    const removedLike = await Like.destroy({
+      where: {
+        comment: comment,
+        user: user,
+      },
     });
-    statusCode = 200;
+
+    const successful = JSON.stringify(removedLike);
+    let body;
+
+    if (successful == 1) {
+      statusCode = 204;
+      body = 'Row was deleted';
+    } else {
+      statusCode = 409;
+      body = 'Row does not exist';
+    }
 
     response = {
       statusCode,
       headers,
-      body: JSON.stringify(result),
+      body: body,
     };
   } catch (error) {
     statusCode = 500;

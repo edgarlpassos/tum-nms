@@ -1,4 +1,3 @@
-import Sequelize from 'sequelize';
 import User from './db/models/user';
 import db from './config/db';
 
