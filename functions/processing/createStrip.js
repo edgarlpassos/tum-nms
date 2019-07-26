@@ -1,18 +1,10 @@
-import fs, {
-  readFileSync,
-  writeFileSync,
-} from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import ffmpeg from 'fluent-ffmpeg';
 import im from 'imagemagick';
 import { S3 } from 'aws-sdk';
+import { asyncForEach } from './utils';
 
 const s3 = new S3();
-
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
 
 async function uploadToS3(imageFileName, bucketName) {
   try {
@@ -64,7 +56,7 @@ export function main(event) {
       Key: key,
     }).promise();
 
-    const videoName = key.split('/')[2].split('.')[0];
+    const videoName = key.split('/')[2].split('.')[0].split('_')[1];
     const filename = `/tmp/${videoName}.mp4`;
     writeFileSync(filename, s3Object.Body);
 
