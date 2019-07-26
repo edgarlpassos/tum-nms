@@ -97,4 +97,15 @@ createStrip:
         events:
           - 's3:ObjectCreated:*'
         rules:
+          - prefix: 'public/outputs/144_'
+multiRes:
+  handler: functions/processing/multiRes.main
+  layers:
+    - arn:aws:lambda:eu-central-1:861288909389:layer:ffmpeg:1
+  events:
+    - existingS3:
+        bucket: 'videocloud-production-inputbucket-1p5ppjlf78zwe'
+        events:
+          - 's3:ObjectCreated:*'
+        rules:
           - prefix: 'public/videos/'
