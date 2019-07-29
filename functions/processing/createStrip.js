@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { copyFile, readFileSync, writeFileSync } from 'fs';
 import ffmpeg from 'fluent-ffmpeg';
 import im from 'imagemagick';
 import { S3 } from 'aws-sdk';
@@ -6,14 +6,14 @@ import { asyncForEach } from './utils';
 
 const s3 = new S3();
 
-async function uploadToS3(imageFileName, bucketName) {
+async function uploadToS3(imageFileName, folderName, bucketName) {
   try {
     const file = readFileSync(`/tmp/${imageFileName}`);
 
     await s3.putObject({
       Body: file,
       Bucket: bucketName,
-      Key: `public/strips/${imageFileName}`,
+      Key: `public/${folderName}/${imageFileName}`,
     }).promise();
 
     console.log('Strip uploaded.');
@@ -31,8 +31,12 @@ async function createStripAndUpload(filenames, videoName, bucketName) {
     if (err) {
       throw err;
     }
-    uploadToS3(imageName, bucketName);
+    uploadToS3(imageName, 'strips', bucketName);
   });
+}
+
+function getVideoName(key) {
+  return key.split('/')[2].split('.')[0].split('_')[1];
 }
 
 export function main(event) {
@@ -44,7 +48,7 @@ export function main(event) {
 
   asyncForEach(event.Records, async (record) => {
     if (!record.s3) {
-      console.log('Not an S3 event. Aborting...')
+      console.log('Not an S3 event. Aborting...');
       return;
     }
 
@@ -56,14 +60,19 @@ export function main(event) {
       Key: key,
     }).promise();
 
-    const videoName = key.split('/')[2].split('.')[0].split('_')[1];
+    const videoName = getVideoName(key);
     const filename = `/tmp/${videoName}.mp4`;
     writeFileSync(filename, s3Object.Body);
 
     let screenshots;
     ffmpeg(filename)
       .on('filenames', (filenames) => { screenshots = filenames; })
-      .on('end', () => { createStripAndUpload(screenshots, videoName, bucketName); })
+      .on('end', () => {
+        createStripAndUpload(screenshots, videoName, bucketName);
+        const thumbname = `${videoName}_thumbnail.png`;
+        copyFile(`/tmp/${screenshots[10]}`, `/tmp/${thumbname}`, console.log);
+        uploadToS3(thumbname, 'thumbnails', bucketName);
+      })
       .on('error', (error) => { console.log(error); })
       .screenshots({
         count: 20,
