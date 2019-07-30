@@ -78,7 +78,6 @@ export function main(event) {
         count: 20,
         filename: `%s_${videoName}`,
         folder: '/tmp/',
-        size: '127x72',
       });
   });
 }

@@ -97,7 +97,7 @@ createStrip:
         events:
           - 's3:ObjectCreated:*'
         rules:
-          - prefix: 'public/outputs/144_'
+          - prefix: 'public/outputs/360_'
 multiRes:
   handler: functions/processing/multiRes.main
   layers:
