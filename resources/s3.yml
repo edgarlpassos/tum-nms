@@ -2,6 +2,11 @@ Resources:
   InputBucket:
     Type: AWS::S3::Bucket
     Properties:
+      LifecycleConfiguration:
+        Rules:
+          - Prefix: 'public/exports/'
+            ExpirationInDays: 1
+            Status: Enabled
       # Set the CORS policy
       CorsConfiguration:
         CorsRules:

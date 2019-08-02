@@ -19,6 +19,7 @@ provider:
     DB_USER: ${self:custom.secrets.DB_USER}
     DB_PASS: ${self:custom.secrets.DB_PASS}
     STRIP_BUCKET_NAME: ${self:custom.secrets.STRIP_BUCKET_NAME}
+    S3_INPUT_BUCKET_NAME: ${self:custom.secrets.S3_INPUT_BUCKET_NAME}
   iamManagedPolicies:
     - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
     - arn:aws:iam::aws:policy/AmazonS3FullAccess
