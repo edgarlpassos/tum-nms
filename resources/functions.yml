@@ -86,6 +86,13 @@ deleteLike:
             paths:
               comment: true
               user: true
+exportVideo:
+  handler: functions/api/exportVideo.main
+  events:
+    - http:
+       path: exportVideo
+       method: post
+       cors: true
 createStrip:
   handler: functions/processing/createStrip.main
   layers:

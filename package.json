@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/edgarlpassos/tum-nms#readme",
   "dependencies": {
+    "adm-zip": "^0.4.13",
     "aws-sdk": "^2.495.0",
     "fluent-ffmpeg": "^2.1.2",
     "imagemagick": "^0.1.3",
@@ -25,6 +26,7 @@
     "sequelize": "^5.8.12",
     "serverless-plugin-existing-s3": "^2.4.0",
     "source-map-support": "^0.5.12",
+    "subtitle": "^2.0.3",
     "url": "^0.11.0",
     "uuid": "^3.3.2"
   },
