@@ -52,6 +52,8 @@ export function main(event) {
       return;
     }
 
+    console.log(record.s3);
+
     const { key } = record.s3.object;
     const bucketName = record.s3.bucket.name;
 

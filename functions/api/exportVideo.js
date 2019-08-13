@@ -1,12 +1,6 @@
-import {
-  createWriteStream,
-  createReadStream,
-  writeFileSync,
-  readFileSync,
-} from 'fs';
+import { writeFileSync, } from 'fs';
 import { S3 } from 'aws-sdk';
 import { stringify } from 'subtitle';
-import archiver from 'archiver';
 import Zip from 'adm-zip';
 
 const s3 = new S3();

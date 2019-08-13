@@ -94,6 +94,7 @@ exportVideo:
        method: post
        cors: true
 createStrip:
+  timeout: 900
   handler: functions/processing/createStrip.main
   layers:
     - arn:aws:lambda:eu-central-1:861288909389:layer:ffmpeg:1
@@ -106,6 +107,7 @@ createStrip:
         rules:
           - prefix: 'public/outputs/360_'
 multiRes:
+  timeout: 900
   handler: functions/processing/multiRes.main
   layers:
     - arn:aws:lambda:eu-central-1:861288909389:layer:ffmpeg:1
